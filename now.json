@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "name": "Test",
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@now/python"
+    },
+    {
+      "src": "ui/package.json",
+      "use": "@now/static-build",
+      "config": { "distDir": "build" }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/v1/(.*)",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/locales/(.*)",
+      "dest": "/ui/locales/$1"
+    },
+    {
+      "src": "/static/(.*)",
+      "headers": { "cache-control": "s-maxage=31536000,immutable" },
+      "dest": "/ui/static/$1"
+    },
+    { "src": "/favicon.ico", "dest": "/ui/favicon.ico" },
+    { "src": "/asset-manifest.json", "dest": "/ui/asset-manifest.json" },
+    { "src": "/manifest.json", "dest": "/ui/manifest.json" },
+    { "src": "/precache-manifest.(.*)", "dest": "/ui/precache-manifest.$1" },
+    { "src": "/analytics.js", "dest": "/ui/analytics.js" },
+    {
+      "src": "/service-worker.js",
+      "headers": { "cache-control": "s-maxage=0" },
+      "dest": "/ui/service-worker.js"
+    },
+    {
+      "src": "/(.*)",
+      "headers": { "cache-control": "s-maxage=0" },
+      "dest": "/ui/index.html"
+    }
+  ]
+}
